@@ -2,6 +2,6 @@
 
 PROG = whatcalls
 SRCS = whatcalls.c
-CFLAGS = -Wall
+CFLAGS = -Wall -I../putils/lib
 
 .include <bsd.prog.mk>
