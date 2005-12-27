@@ -7,14 +7,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sysexits.h>
 #include <unistd.h>
 
 #include "symtab.h"
 
-static __dead	void  usage(void);
-
-extern char **environ;
+void  usage(void);
 
 int
 main(int argc, char **argv)
@@ -31,26 +28,28 @@ main(int argc, char **argv)
 	prog = argv[2];
 
 	if ((st = symtab_open(prog)) == NULL)
-		err(EX_NOINPUT, "%s", prog);
+		err(1, "%s", prog);
 	if ((addr = symtab_getsymaddr(st, func)) == NULL)
-		errx(EX_DATAERR, "%s: no such symbol", func);
-	for (; addr++) {
+		errx(1, "%s: no such symbol", func);
+	for (;; addr++) {
+#if 0
 		if ()
 			base = addr;
 		if (addr)
-			(void)printf("%s+0x%x\n",
+			printf("%s+0x%x\n",
 			    symtab_getsymname(st, p), addr - base);
+#endif
 	}
 	symtab_close(st);
-	exit(EXIT_SUCCESS);
+	exit(0);
 }
 
-static __dead void
+void
 usage(void)
 {
 	extern char *__progname;
 
-	(void)fprintf(stderr, "usage: %s function executable\n",
+	fprintf(stderr, "usage: %s function executable\n",
 	    __progname);
-	exit(EX_USAGE);
+	exit(1);
 }
